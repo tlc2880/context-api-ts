@@ -10,6 +10,7 @@ const initState: StateType = { count: 0, text: '' }
 const enum REDUCER_ACTION_TYPE {
     INCREMENT,
     DECREMENT,
+    RESET,
     NEW_INPUT,
 }
 
@@ -24,6 +25,8 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
             return { ...state, count: state.count + 1 }
         case REDUCER_ACTION_TYPE.DECREMENT:
             return { ...state, count: state.count - 1 }
+        case REDUCER_ACTION_TYPE.RESET:
+                return { ...state, count: 0 }
         case REDUCER_ACTION_TYPE.NEW_INPUT:
             return { ...state, text: action.payload ?? '' }
         default:
@@ -38,6 +41,8 @@ const useCounterContext = (initState: StateType) => {
 
     const decrement = useCallback(() => dispatch({ type: REDUCER_ACTION_TYPE.DECREMENT }), [])
 
+    const reset = useCallback(() => dispatch({ type: REDUCER_ACTION_TYPE.RESET }), [])
+
     const handleTextInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         dispatch({
             type: REDUCER_ACTION_TYPE.NEW_INPUT,
@@ -45,7 +50,7 @@ const useCounterContext = (initState: StateType) => {
         })
     }, [])
 
-    return { state, increment, decrement, handleTextInput }
+    return { state, increment, decrement, reset, handleTextInput }
 }
 
 type UseCounterContextType = ReturnType<typeof useCounterContext>
@@ -54,6 +59,7 @@ const initContextState: UseCounterContextType = {
     state: initState,
     increment: () => { },
     decrement: () => { },
+    reset: () => { },
     handleTextInput: (e: ChangeEvent<HTMLInputElement>) => { },
 }
 
@@ -77,11 +83,12 @@ type UseCounterHookType = {
     count: number,
     increment: () => void,
     decrement: () => void,
+    reset: () => void,
 }
 
 export const useCounter = (): UseCounterHookType => {
-    const { state: { count }, increment, decrement } = useContext(CounterContext)
-    return { count, increment, decrement }
+    const { state: { count }, increment, decrement, reset } = useContext(CounterContext)
+    return { count, increment, decrement, reset }
 }
 
 type UseCounterTextHookType = {

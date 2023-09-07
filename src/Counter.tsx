@@ -7,7 +7,7 @@ type ChildrenType = {
 }
 
 const Counter = ({ children }: ChildrenType) => {
-    const { count, increment, decrement } = useCounter()
+    const { count, increment, decrement, reset } = useCounter()
     const { text, handleTextInput } = useCounterText()
 
     return (
@@ -16,6 +16,7 @@ const Counter = ({ children }: ChildrenType) => {
             <div>
                 <button onClick={increment}>+</button>
                 <button onClick={decrement}>-</button>
+                <button onClick={reset}>Reset</button>
             </div>
             <input type="text" onChange={handleTextInput} />
             <h2>{text}</h2>
